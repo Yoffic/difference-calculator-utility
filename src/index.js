@@ -1,9 +1,12 @@
 import fs from 'fs';
+import path from 'path';
 import { has } from 'lodash';
 
+const getFileContent = (filePath) => fs.readFileSync(path.join(process.cwd(), filePath));
+
 const genDiff = (pathToFile1, pathToFile2) => {
-  const fileToCompare1 = fs.readFileSync(pathToFile1, 'utf-8');
-  const fileToCompare2 = fs.readFileSync(pathToFile2, 'utf-8');
+  const fileToCompare1 = getFileContent(pathToFile1);
+  const fileToCompare2 = getFileContent(pathToFile2);
 
   const obj1 = JSON.parse(fileToCompare1);
   const obj2 = JSON.parse(fileToCompare2);
