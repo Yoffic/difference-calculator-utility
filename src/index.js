@@ -1,35 +1,33 @@
 import fs from 'fs';
 import path from 'path';
-import { has } from 'lodash';
 
-const getFileContent = (filePath) => fs.readFileSync(path.join(process.cwd(), filePath));
+const getContent = (filePath) => fs.readFileSync(path.join(process.cwd(), filePath));
+const parse = (content) => JSON.parse(content);
 
-const genDiff = (pathToFile1, pathToFile2) => {
-  const fileToCompare1 = getFileContent(pathToFile1);
-  const fileToCompare2 = getFileContent(pathToFile2);
+const genDiff = (filePath1, filePath2) => {
+  const obj1 = parse(getContent(filePath1));
+  const obj2 = parse(getContent(filePath2));
 
-  const obj1 = JSON.parse(fileToCompare1);
-  const obj2 = JSON.parse(fileToCompare2);
+  const allEntries = Object.entries(obj1).concat(Object.entries(obj2)).sort();
 
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  const uniqKeys = new Set(keys1.concat(keys2)).values();
-  const allKeys = [...uniqKeys];
-
-  const Diffs = allKeys.reduce((acc, key) => {
-    if (has(obj1, key) && has(obj2, key)) {
-      if (obj1[key] === obj2[key]) {
-        return [...acc, `   ${key}: ${obj2[key]}`];
-      }
-      return [...acc, ` + ${key}: ${obj2[key]}`, ` - ${key}: ${obj1[key]}`];
+  const difference = allEntries.reduce((acc, [key, value]) => {
+    const { [key]: startValue } = obj1;
+    const { [key]: finalValue } = obj2;
+    if (finalValue !== value) {
+      return { ...acc, [` - ${key}`]: value };
     }
-    if (has(obj1, key) && !has(obj2, key)) {
-      return [...acc, ` - ${key}: ${obj1[key]}`];
+    if (startValue === finalValue) {
+      return { ...acc, [`   ${key}`]: value };
     }
-    return [...acc, ` + ${key}: ${obj2[key]}`];
-  }, []).join('\n');
+    return { ...acc, [` + ${key}`]: value };
+  }, {});
 
-  return `{\n${Diffs}\n}`;
+  const result = Object
+    .entries(difference)
+    .map((entry) => entry.join(': '))
+    .join('\n');
+
+  return `{\n${result}\n}`;
 };
 
 export default genDiff;
