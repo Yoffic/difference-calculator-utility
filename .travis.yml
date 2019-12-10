@@ -10,7 +10,7 @@ env:
     - CC_TEST_REPORTER_ID=4f9177cab8523a9404de37e5f0acb9ed425ac99aa99316421711c6456b89f20f
 
 before_script:
-  - brew install https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 
