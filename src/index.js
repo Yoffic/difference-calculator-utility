@@ -1,14 +1,5 @@
-import fs from 'fs';
-import path from 'path';
-import yaml from 'js-yaml';
+import parse from './parsers';
 
-const getContent = (filePath) => fs.readFileSync(path.join(process.cwd(), filePath));
-const getExt = (filePath) => path.extname(filePath);
-const parser = {
-  '.json': (content) => JSON.parse(content),
-  '.yml': (content) => yaml.safeLoad(content),
-};
-const parse = (filePath) => parser[getExt(filePath)](getContent(filePath));
 const genDiff = (filePath1, filePath2) => {
   const obj1 = parse(filePath1);
   const obj2 = parse(filePath2);
