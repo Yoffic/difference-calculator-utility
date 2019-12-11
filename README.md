@@ -9,5 +9,8 @@ To start using the utility first download this package. Then install npm:
 npm install
 ```
 
-The example of how the Difference Calculator works   
+The example of how the Difference Calculator works with simple JSON files  
 [![asciicast](https://asciinema.org/a/DfCTXz6feBOI9YAlSfMuquBTa.svg)](https://asciinema.org/a/DfCTXz6feBOI9YAlSfMuquBTa)
+
+The example of how the Difference Calculator works with simple YAML files
+[![asciicast](https://asciinema.org/a/iSjYcbCDl4pq7z4GKwwzlLVsZ.svg)](https://asciinema.org/a/iSjYcbCDl4pq7z4GKwwzlLVsZ)
