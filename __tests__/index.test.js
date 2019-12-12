@@ -1,19 +1,26 @@
 import fs from 'fs';
 import path from 'path';
+import { chunk } from 'lodash';
+import sortFiles from '../src/utils';
 import genDiff from '../src';
 
-const result = fs.readFileSync(path.join(__dirname, '__fixtures__/result1'), 'utf-8');
-const mainPath = '__tests__/__fixtures__/';
-const makePath = (curPath, file) => path.join(path.join(mainPath, curPath), file);
-const json = 'simpleJson/';
-const yaml = 'simpleYaml/';
-const ini = 'simpleIni/';
-const testFiles = [
-  [makePath(json, 'before.json'), makePath(json, 'after.json')],
-  [makePath(yaml, 'before.yml'), makePath(yaml, 'after.yml')],
-  [makePath(ini, 'before.ini'), makePath(ini, 'after.ini')],
-];
+const resultSimple = fs.readFileSync(path.join(__dirname, '__fixtures__/resultSimple'), 'utf-8');
+const resultComplex = fs.readFileSync(path.join(__dirname, '__fixtures__/resultComplex'), 'utf-8');
 
-test.each(testFiles)('differences', (before, after) => {
-  expect(genDiff(before, after)).toEqual(result);
+const pathToSimple = '__tests__/__fixtures__/simple/';
+const pathToComplex = '__tests__/__fixtures__/complex/';
+
+const makePath = (curPath, file) => path.join(curPath, file);
+const getFiles = (dir) => fs.readdirSync(path.join(process.cwd(), dir), 'utf-8');
+
+const testSimpleFiles = chunk(sortFiles(getFiles(pathToSimple))
+  .map((file) => makePath(pathToSimple, file)), 2);
+const testComplexFiles = chunk(sortFiles(getFiles(pathToComplex))
+  .map((file) => makePath(pathToComplex, file)), 2);
+
+test.each(testSimpleFiles)('differences between simple', (before, after) => {
+  expect(genDiff(before, after)).toEqual(resultSimple);
+});
+test.each(testComplexFiles)('differences between complex', (before, after) => {
+  expect(genDiff(before, after)).toEqual(resultComplex);
 });
