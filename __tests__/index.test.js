@@ -3,7 +3,7 @@ import path from 'path';
 import genDiff from '../src';
 
 const result = fs.readFileSync(path.join(__dirname, '__fixtures__/result'), 'utf-8');
-const pathToFiles = '__tests__/__fixtures__/files/';
+const pathToFiles = '__tests__/__fixtures__/filesToTest/';
 
 const extNames = ['.json', '.yml', '.ini'];
 
