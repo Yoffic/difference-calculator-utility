@@ -31,4 +31,7 @@ Where `FILENAME1` is the name of the first file to compare and `FILENAME2` is th
 
 [![asciicast](https://asciinema.org/a/iSjYcbCDl4pq7z4GKwwzlLVsZ.svg)](https://asciinema.org/a/iSjYcbCDl4pq7z4GKwwzlLVsZ)
 
-[![asciicast](https://asciinema.org/a/KLCWAkQXBkAimcIdG8P49K6hJ.svg)](https://asciinema.org/a/KLCWAkQXBkAimcIdG8P49K6hJ)
+[![asciicast](https://asciinema.org/a/KLCWAkQXBkAimcIdG8P49K6hJ.svg)](https://asciinema.org/a/KLCWAkQXBkAimcIdG8P49K6hJ)   
+
+### The example of how the Difference Calculator works with complex files
+[![asciicast](https://asciinema.org/a/mtYuH1DidHffvW1T7Hh78eXJV.svg)](https://asciinema.org/a/mtYuH1DidHffvW1T7Hh78eXJV)
