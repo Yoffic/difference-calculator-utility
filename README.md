@@ -33,5 +33,21 @@ Where `FILENAME1` is the name of the first file to compare and `FILENAME2` is th
 
 [![asciicast](https://asciinema.org/a/KLCWAkQXBkAimcIdG8P49K6hJ.svg)](https://asciinema.org/a/KLCWAkQXBkAimcIdG8P49K6hJ)   
 
-### The example of how the Difference Calculator works with complex files
-[![asciicast](https://asciinema.org/a/mtYuH1DidHffvW1T7Hh78eXJV.svg)](https://asciinema.org/a/mtYuH1DidHffvW1T7Hh78eXJV)
+## Output format
+You can specify output format of differences
+
+To specify output format add `--format` flag and type of the output:   
+
+```
+gendiff --format [type] FILENAME1 FILENAME2
+
+```   
+
+Where `[type]` could be 'complex' or 'plain', `FILENAME1` is the name of the first file to compare and `FILENAME2` is the name of the second file. Keep in mind that files must be the same type.
+
+### The example of complex output format type
+[![asciicast](https://asciinema.org/a/mtYuH1DidHffvW1T7Hh78eXJV.svg)](https://asciinema.org/a/mtYuH1DidHffvW1T7Hh78eXJV)   
+
+### The example of plain output format type
+
+[![asciicast](https://asciinema.org/a/D7JdBnhrwLa55vDZZaHX3WiJD.svg)](https://asciinema.org/a/D7JdBnhrwLa55vDZZaHX3WiJD)   
