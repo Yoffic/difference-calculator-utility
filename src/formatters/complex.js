@@ -1,4 +1,4 @@
-import { getSpaces, stringify } from './stringify';
+import { getSpaces, stringify } from '../stringify';
 
 const types = {
   added: ({ key, value }, level) => stringify(`+ ${key}`, value, level),
@@ -11,11 +11,7 @@ const types = {
 };
 
 const buildOutput = (data, level = 1) => data.map((item) => {
-  const {
-    type,
-    children,
-  } = item;
-
+  const { type, children } = item;
   const func = types[type];
 
   if (children) {
@@ -25,6 +21,4 @@ const buildOutput = (data, level = 1) => data.map((item) => {
   return func(item, level);
 }).join('\n');
 
-const getOutput = (data) => `{\n${buildOutput(data)}\n}`;
-
-export default getOutput;
+export default (data) => `{\n${buildOutput(data)}\n}`;
