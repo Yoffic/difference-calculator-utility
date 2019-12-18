@@ -10,15 +10,15 @@ const types = {
   },
 };
 
-const buildOutput = (data, level = 1) => data.map((item) => {
-  const { type, children } = item;
-  const func = types[type];
+const getOutput = (data, level = 1) => data.map((node) => {
+  const { type, children } = node;
+  const getStr = types[type];
 
   if (children) {
-    const value = `{\n${buildOutput(children, level + 2)}\n${getSpaces(level + 1)}}`;
-    return func({ key: item.key, value }, level);
+    const value = `{\n${getOutput(children, level + 2)}\n${getSpaces(level + 1)}}`;
+    return getStr({ key: node.key, value }, level);
   }
-  return func(item, level);
+  return getStr(node, level);
 }).join('\n');
 
-export default (data) => `{\n${buildOutput(data)}\n}`;
+export default (data) => `{\n${getOutput(data)}\n}`;
