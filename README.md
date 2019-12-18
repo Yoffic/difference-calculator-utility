@@ -43,11 +43,13 @@ gendiff --format [type] FILENAME1 FILENAME2
 
 ```   
 
-Where `[type]` could be 'complex' or 'plain', `FILENAME1` is the name of the first file to compare and `FILENAME2` is the name of the second file. Keep in mind that files must be the same type.
+Where `[type]` could be 'complex', 'plain' or 'json', `FILENAME1` is the name of the first file to compare and `FILENAME2` is the name of the second file. Keep in mind that files must be the same type.
 
 ### The example of complex output format type
 [![asciicast](https://asciinema.org/a/mtYuH1DidHffvW1T7Hh78eXJV.svg)](https://asciinema.org/a/mtYuH1DidHffvW1T7Hh78eXJV)   
 
 ### The example of plain output format type
-
 [![asciicast](https://asciinema.org/a/D7JdBnhrwLa55vDZZaHX3WiJD.svg)](https://asciinema.org/a/D7JdBnhrwLa55vDZZaHX3WiJD)   
+
+### The example of JSON output format type   
+[![asciicast](https://asciinema.org/a/DvnkfxqbqJqE9b0OgkP7rPzMu.svg)](https://asciinema.org/a/DvnkfxqbqJqE9b0OgkP7rPzMu)
