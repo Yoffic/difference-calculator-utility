@@ -12,8 +12,8 @@ const plainTypes = {
   unchanged: () => [],
 };
 
-const buildPlain = (data, parent = '') => {
-  const allValues = data.reduce((acc, node) => {
+const buildPlain = (data, parent = '') => (
+  data.reduce((acc, node) => {
     const {
       key,
       type,
@@ -21,27 +21,23 @@ const buildPlain = (data, parent = '') => {
       children,
     } = node;
     const getOutput = plainTypes[type];
-    const curKey = `${parent}${key}`;
+    const currentKey = `${parent}${key}`;
 
     if (children) {
-      return [...acc, buildPlain(children, `${curKey}.`)];
+      return [...acc, buildPlain(children, `${currentKey}.`)];
     }
 
     if (Array.isArray(value)) {
-      const values = value.map((item) => {
-        const valueType = typeof item;
-        return valueTypes[valueType](item);
-      });
+      const values = value.map((subValue) => (
+        valueTypes[(typeof subValue)](subValue)
+      ));
 
-      return [...acc, getOutput(curKey, values)];
+      return [...acc, getOutput(currentKey, values)];
     }
 
-    const valueType = typeof value;
-    const outputValue = valueTypes[valueType](value);
-    return [...acc, getOutput(curKey, outputValue)];
-  }, []);
-
-  return allValues.flat().join('\n');
-};
+    const outputValue = valueTypes[(typeof value)](value);
+    return [...acc, getOutput(currentKey, outputValue)];
+  }, []).flat().join('\n')
+);
 
 export default (data) => buildPlain(data);
