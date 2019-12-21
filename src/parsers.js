@@ -13,14 +13,16 @@ const getExt = (filepath) => path.extname(filepath);
 const getParser = (extname) => parsers[extname];
 
 const getCurDirpath = () => process.cwd();
-const getContent = (filepath, curDirpath) => fs.readFileSync(path.join(curDirpath, filepath), 'utf-8');
+const getAbsPath = (filepath, curDirpath) => path.join(curDirpath, filepath);
+const getContent = (filepath) => fs.readFileSync(filepath, 'utf-8');
 
 export default (filepath) => {
   const extname = getExt(filepath);
   const parser = getParser(extname);
 
   const curDirpath = getCurDirpath();
-  const content = getContent(filepath, curDirpath);
+  const absFilepath = getAbsPath(filepath, curDirpath);
+  const content = getContent(absFilepath);
 
   return parser(content);
 };
