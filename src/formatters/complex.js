@@ -5,8 +5,8 @@ const outputs = {
   added: ({ key, value }, level) => stringify(`+ ${key}`, value, level),
   removed: ({ key, value }, level) => stringify(`- ${key}`, value, level),
   unchanged: ({ key, value }, level) => stringify(`  ${key}`, value, level),
-  updated: ({ key, prevValue, curValue }, level) => (
-    [stringify(`- ${key}`, prevValue, level), stringify(`+ ${key}`, curValue, level)].join('\n')
+  updated: ({ key, valueBefore, valueAfter }, level) => (
+    [stringify(`- ${key}`, valueBefore, level), stringify(`+ ${key}`, valueAfter, level)].join('\n')
   ),
   nested: ({ key, children }, level) => {
     const value = `{\n${buildOutput(children, level + 2)}\n${getSpaces(level + 1)}}`;

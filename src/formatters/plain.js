@@ -14,9 +14,9 @@ const outputs = {
     return `Property '${key}' was added with value: ${outputValue}`;
   },
   removed: ({ key }) => `Property '${key}' was removed`,
-  updated: ({ key, prevValue, curValue }) => {
-    const outputValue1 = getOutputValue(prevValue);
-    const outputValue2 = getOutputValue(curValue);
+  updated: ({ key, valueBefore, valueAfter }) => {
+    const outputValue1 = getOutputValue(valueBefore);
+    const outputValue2 = getOutputValue(valueAfter);
     return `Property '${key}' was updated. From ${outputValue1} to ${outputValue2}`;
   },
   unchanged: () => [],
