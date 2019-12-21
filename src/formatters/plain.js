@@ -1,43 +1,37 @@
-const valueTypes = {
+/* eslint-disable no-use-before-define */
+const valueOutputs = {
   string: (value) => `'${value}'`,
   number: (value) => value,
-  object: (value) => (Array.isArray(value) ? value : '[complex value]'),
+  object: () => '[complex value]',
   boolean: (value) => value,
 };
 
-const plainTypes = {
-  added: (key, value) => `Property '${key}' was added with value: ${value}`,
-  removed: (key) => `Property '${key}' was removed`,
-  updated: (key, [value1, value2]) => (`Property '${key}' was updated. From ${value1} to ${value2}`),
+const getOutputValue = (value) => valueOutputs[(typeof value)](value);
+
+const outputs = {
+  added: ({ key, value }) => {
+    const outputValue = getOutputValue(value);
+    return `Property '${key}' was added with value: ${outputValue}`;
+  },
+  removed: ({ key }) => `Property '${key}' was removed`,
+  updated: ({ key, prevValue, curValue }) => {
+    const outputValue1 = getOutputValue(prevValue);
+    const outputValue2 = getOutputValue(curValue);
+    return `Property '${key}' was updated. From ${outputValue1} to ${outputValue2}`;
+  },
   unchanged: () => [],
+  nested: ({ key, children }) => buildOutput(children, `${key}.`),
 };
 
-const buildPlain = (data, parent = '') => (
+const getOutput = (type) => outputs[type];
+
+const buildOutput = (data, parent = '') => (
   data.reduce((acc, node) => {
-    const {
-      key,
-      type,
-      value,
-      children,
-    } = node;
-    const getOutput = plainTypes[type];
-    const currentKey = `${parent}${key}`;
+    const { key, type } = node;
+    const output = getOutput(type);
 
-    if (children) {
-      return [...acc, buildPlain(children, `${currentKey}.`)];
-    }
-
-    if (Array.isArray(value)) {
-      const values = value.map((subValue) => (
-        valueTypes[(typeof subValue)](subValue)
-      ));
-
-      return [...acc, getOutput(currentKey, values)];
-    }
-
-    const outputValue = valueTypes[(typeof value)](value);
-    return [...acc, getOutput(currentKey, outputValue)];
+    return [...acc, output({ ...node, key: `${parent}${key}` })];
   }, []).flat().join('\n')
 );
 
-export default (data) => buildPlain(data);
+export default (data) => buildOutput(data);

@@ -3,7 +3,13 @@ import getPlain from './plain';
 import getJson from './json';
 
 export default (data, format) => {
-  if (format === 'plain') return getPlain(data);
-  if (format === 'json') return getJson(data);
-  return getComplex(data);
+  switch (format) {
+    case 'plain':
+      return getPlain(data);
+    case 'json':
+      return getJson(data);
+    case 'complex':
+    default:
+      return getComplex(data);
+  }
 };
