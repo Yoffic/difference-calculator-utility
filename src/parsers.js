@@ -3,28 +3,24 @@ import path from 'path';
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parsers = [
-  {
-    name: '.json',
-    process: (content) => JSON.parse(content),
-  },
-  {
-    name: '.yml',
-    process: (content) => yaml.safeLoad(content),
-  },
-  {
-    name: '.ini',
-    process: (content) => ini.parse(content),
-  },
-];
+const parsers = {
+  '.json': (content) => JSON.parse(content),
+  '.yml': (content) => yaml.safeLoad(content),
+  '.ini': (content) => ini.parse(content),
+};
 
-const getContent = (filePath) => fs.readFileSync(path.resolve(process.cwd(), filePath), 'utf-8');
+const getExt = (filepath) => path.extname(filepath);
+const getParser = (extname) => parsers[extname];
 
-const getExt = (file) => path.extname(file);
+const getCurDirpath = () => process.cwd();
+const getContent = (filepath, curDirpath) => fs.readFileSync(path.join(curDirpath, filepath), 'utf-8');
 
-const getParser = (file) => parsers.find(({ name }) => name === getExt(file));
+export default (filepath) => {
+  const extname = getExt(filepath);
+  const parser = getParser(extname);
 
-export default (filePath) => {
-  const { process } = getParser(filePath);
-  return process(getContent(filePath));
+  const curDirpath = getCurDirpath();
+  const content = getContent(filepath, curDirpath);
+
+  return parser(content);
 };
