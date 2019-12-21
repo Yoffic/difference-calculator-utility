@@ -2,29 +2,31 @@ import fs from 'fs';
 import path from 'path';
 import genDiff from '../src';
 
-const readFile = (fileName) => fs.readFileSync(path.join(__dirname, `__fixtures__/${fileName}`), 'utf-8');
-const extNames = ['.json', '.yml', '.ini'];
-const filesDir = '__tests__/__fixtures__/filesToTest/';
-const makePath = (curPath, file) => path.join(curPath, file);
+const makePath = (curDirpath, filepath) => path.join(curDirpath, filepath);
+const readFile = (filepath) => fs.readFileSync(makePath(__dirname, filepath), 'utf-8');
+const getFilepath = (filename) => `__fixtures__/${filename}`;
 
-const filesPaths = extNames.map((extName) => (
-  [makePath(filesDir, `before${extName}`), makePath(filesDir, `after${extName}`)]
+const extnames = ['.json', '.yml', '.ini'];
+const pathToTestfiles = '__tests__/__fixtures__/testfiles/';
+const testfilesPaths = extnames.map((extname) => (
+  [makePath(pathToTestfiles, `before${extname}`), makePath(pathToTestfiles, `after${extname}`)]
 ));
 
 const formats = ['complex', 'plain', 'json'];
 const testArgs = formats
-  .map((format) => [...filesPaths.map((file) => [...file, format])])
+  .map((format) => [...testfilesPaths.map((testfilespath) => [...testfilespath, format])])
   .flat();
 
-const expected = [readFile('expectedComplex'), readFile('expectedPlain'), readFile('expectedJson')];
+const resultComplex = readFile(getFilepath('expectedComplex'));
+const resultPlain = readFile(getFilepath('expectedPlain'));
+const resultJson = readFile(getFilepath('expectedJson'));
 
 test.each(testArgs)('differences between files', (before, after, format) => {
-  const [complex, plain, json] = expected;
   if (format === 'plain') {
-    expect(genDiff(before, after, format)).toEqual(plain);
+    expect(genDiff(before, after, format)).toEqual(resultPlain);
   }
   if (format === 'json') {
-    expect(genDiff(before, after, format)).toEqual(json);
+    expect(genDiff(before, after, format)).toEqual(resultJson);
   }
-  expect(genDiff(before, after)).toEqual(complex);
+  expect(genDiff(before, after)).toEqual(resultComplex);
 });
