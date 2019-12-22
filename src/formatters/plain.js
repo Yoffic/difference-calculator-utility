@@ -1,4 +1,5 @@
 /* eslint-disable no-use-before-define */
+
 const valueOutputs = {
   string: (value) => `'${value}'`,
   number: (value) => value,

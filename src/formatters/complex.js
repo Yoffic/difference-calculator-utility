@@ -1,4 +1,5 @@
 /* eslint-disable no-use-before-define */
+
 import { getSpaces, stringify } from '../stringify';
 
 const outputs = {
