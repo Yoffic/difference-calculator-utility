@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 /* eslint-disable no-use-before-define */
 
+=======
+>>>>>>> 971f91f32d5d1938df43b5c5f7d25d8f3e8e6966
 const valueOutputs = {
   string: (value) => `'${value}'`,
   number: (value) => value,
