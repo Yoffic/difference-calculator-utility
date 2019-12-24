@@ -1,32 +1,31 @@
 import fs from 'fs';
-import path from 'path';
 import genDiff from '../src';
 
-const makePath = (curDirpath, filepath) => path.join(curDirpath, filepath);
-const readFile = (filepath) => fs.readFileSync(makePath(__dirname, filepath), 'utf-8');
-const getFilepath = (filename) => `__fixtures__/${filename}`;
+const readFile = (filepath) => fs.readFileSync(filepath, 'utf-8');
+const getPath = (filename) => `__tests__/__fixtures__/${filename}`;
 
-const extnames = ['.json', '.yml', '.ini'];
-const pathToTestfiles = '__tests__/__fixtures__/testfiles/';
-const testfilesPaths = extnames.map((extname) => (
-  [makePath(pathToTestfiles, `before${extname}`), makePath(pathToTestfiles, `after${extname}`)]
+const filetypes = ['ini', 'json', 'yml'];
+
+const getArgs = (format) => filetypes.map((filetype) => (
+  [getPath(`before.${filetype}`), getPath(`after.${filetype}`), format]
 ));
 
-const formats = ['complex', 'plain', 'json'];
-const testArgs = formats
-  .map((format) => [...testfilesPaths.map((testfilespath) => [...testfilespath, format])])
-  .flat();
+describe('generate difference', () => {
+  const testArgs1 = getArgs('complex');
+  test.each(testArgs1)('complex output %p, %p', (before, after, format) => {
+    const output = readFile(getPath(format));
+    expect(genDiff(before, after, format)).toEqual(output);
+  });
 
-const resultComplex = readFile(getFilepath('expectedComplex'));
-const resultPlain = readFile(getFilepath('expectedPlain'));
-const resultJson = readFile(getFilepath('expectedJson'));
+  const testArgs2 = getArgs('plain');
+  test.each(testArgs2)('plain output %p, %p', (before, after, format) => {
+    const output = readFile(getPath(format));
+    expect(genDiff(before, after, format)).toEqual(output);
+  });
 
-test.each(testArgs)('differences between files', (before, after, format) => {
-  if (format === 'plain') {
-    expect(genDiff(before, after, format)).toEqual(resultPlain);
-  }
-  if (format === 'json') {
-    expect(genDiff(before, after, format)).toEqual(resultJson);
-  }
-  expect(genDiff(before, after)).toEqual(resultComplex);
+  const testArgs3 = getArgs('json');
+  test.each(testArgs3)('json output %p, %p', (before, after, format) => {
+    const output = readFile(getPath(format));
+    expect(genDiff(before, after, format)).toEqual(output);
+  });
 });
