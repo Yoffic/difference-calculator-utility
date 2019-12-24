@@ -11,21 +11,17 @@ const getArgs = (format) => filetypes.map((filetype) => (
 ));
 
 describe('generate difference', () => {
-  const testArgs1 = getArgs('complex');
-  test.each(testArgs1)('complex output %p, %p', (before, after, format) => {
+  const testCallback = (before, after, format) => {
     const output = readFile(getPath(format));
     expect(genDiff(before, after, format)).toEqual(output);
-  });
+  };
+
+  const testArgs1 = getArgs('complex');
+  test.each(testArgs1)('complex output %p, %p', testCallback);
 
   const testArgs2 = getArgs('plain');
-  test.each(testArgs2)('plain output %p, %p', (before, after, format) => {
-    const output = readFile(getPath(format));
-    expect(genDiff(before, after, format)).toEqual(output);
-  });
+  test.each(testArgs2)('plain output %p, %p', testCallback);
 
   const testArgs3 = getArgs('json');
-  test.each(testArgs3)('json output %p, %p', (before, after, format) => {
-    const output = readFile(getPath(format));
-    expect(genDiff(before, after, format)).toEqual(output);
-  });
+  test.each(testArgs3)('json output %p, %p', testCallback);
 });
