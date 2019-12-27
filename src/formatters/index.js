@@ -2,14 +2,10 @@ import getComplex from './complex';
 import getPlain from './plain';
 import getJson from './json';
 
-export default (data, format) => {
-  switch (format) {
-    case 'plain':
-      return getPlain(data);
-    case 'json':
-      return getJson(data);
-    case 'complex':
-    default:
-      return getComplex(data);
-  }
+const outputType = {
+  plain: (data) => getPlain(data),
+  json: (data) => getJson(data),
+  complex: (data) => getComplex(data),
 };
+
+export default (data, format) => outputType[format](data) || getComplex(data);
