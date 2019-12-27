@@ -8,4 +8,4 @@ const outputType = {
   complex: (data) => getComplex(data),
 };
 
-export default (data, format) => outputType[format](data) || getComplex(data);
+export default (data, format) => outputType[format](data);
