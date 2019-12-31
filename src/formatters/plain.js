@@ -21,21 +21,28 @@ const outputs = {
     return `Property '${key}' was updated. From ${outputValue1} to ${outputValue2}`;
   },
   unchanged: () => '',
-  nested: ({ key, children }) => buildOutput(children, `${key}.`),
+  nested: () => '',
 };
 
 const getOutput = (type) => outputs[type];
 
-const buildOutput = (data, parent = '') => (
-  data
-    .map((node) => {
-      const { key, type } = node;
-      const output = getOutput(type);
+const buildOutput = (data) => {
+  const iter = (tree, parent) => (
+    tree
+      .map((node) => {
+        const { key, type, children } = node;
+        if (type === 'nested') {
+          return iter(children, `${parent}${key}.`);
+        }
+        const output = getOutput(type);
 
-      return output({ ...node, key: `${parent}${key}` });
-    })
-    .filter((node) => node !== '')
-    .join('\n')
-);
+        return output({ ...node, key: `${parent}${key}` });
+      })
+      .filter((node) => node !== '')
+      .join('\n')
+  );
+
+  return iter(data, '');
+};
 
 export default buildOutput;
