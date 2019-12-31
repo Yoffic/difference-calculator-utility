@@ -3,9 +3,9 @@ import getPlain from './plain';
 import getJson from './json';
 
 const outputType = {
-  plain: (data) => getPlain(data),
-  json: (data) => getJson(data),
-  complex: (data) => getComplex(data),
+  plain: getPlain,
+  json: getJson,
+  complex: getComplex,
 };
 
 export default (data, format) => outputType[format](data);
