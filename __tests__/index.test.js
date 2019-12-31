@@ -5,9 +5,9 @@ import genDiff from '../src';
 const filetypes = ['ini', 'json', 'yml'];
 const formats = ['complex', 'plain', 'json'];
 
-const testArgs = formats.map((format) => (
+const testArgs = formats.flatMap((format) => (
   filetypes.map((filetype) => [filetype, format])
-)).flat();
+));
 
 test.each(testArgs)('%s type files difference with %s output', (filetype, format) => {
   const getPath = (filename) => path.join(__dirname, `__fixtures__/${filename}`);
