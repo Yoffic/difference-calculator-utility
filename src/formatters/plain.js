@@ -27,12 +27,12 @@ const outputs = {
 const getOutput = (type) => outputs[type];
 
 const buildOutput = (data, parent = '') => (
-  data.reduce((acc, node) => {
+  data.flatMap((node) => {
     const { key, type } = node;
     const output = getOutput(type);
 
-    return [...acc, output({ ...node, key: `${parent}${key}` })];
-  }, []).flat().join('\n')
+    return output({ ...node, key: `${parent}${key}` });
+  }).join('\n')
 );
 
-export default (data) => buildOutput(data);
+export default buildOutput;
