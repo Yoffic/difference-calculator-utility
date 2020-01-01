@@ -21,12 +21,12 @@ const outputs = {
     return `Property '${key}' was updated. From ${outputValue1} to ${outputValue2}`;
   },
   unchanged: () => '',
-  nested: ({ key, children }) => mapping(children, `${key}.`),
+  nested: ({ key, children }) => mapOutput(children, `${key}.`),
 };
 
 const getOutput = (type) => outputs[type];
 
-const mapping = (data, parent = '') => (
+const mapOutput = (data, parent = '') => (
   data
     .map((node) => {
       const { key, type } = node;
@@ -38,6 +38,6 @@ const mapping = (data, parent = '') => (
     .join('\n')
 );
 
-const buildOutput = (data) => mapping(data);
+const buildOutput = (data) => mapOutput(data, '');
 
 export default buildOutput;
