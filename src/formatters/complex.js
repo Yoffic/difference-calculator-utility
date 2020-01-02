@@ -12,11 +12,11 @@ const stringify = (key, value, level) => {
   const newValue = Object
     .entries(value)
     .map(([curKey, curValue]) => {
-      if (value instanceof Object) {
+      if (curValue instanceof Object) {
         return stringify(curKey, curValue, level + 3);
       }
 
-      const curFirstIndent = getSpaces(level + 2);
+      const curFirstIndent = getSpaces(level + 3);
       return [curFirstIndent, `${curKey}: ${curValue}`].join('');
     })
     .join('\n');
