@@ -1,23 +1,23 @@
 const getSpaces = (val) => ' '.repeat(val * 2);
 
-const stringifyNested = (data, level) => (
-  Object.entries(data)
-    .map(([key, value]) => {
-      const indent = getSpaces(level + 1);
-      if (value instanceof Object) {
-        return [`${indent}${key}: {`, stringifyNested(value, level + 1), `${indent}}`].join('\n');
-      }
-
-      return [indent, `${key}: ${value}`].join('');
-    }).join('\n')
-);
-
 const stringify = (key, value, level) => {
   const firstIndent = getSpaces(level);
   const lastIndent = getSpaces(level + 1);
 
   if (value instanceof Object) {
-    return [`${firstIndent}${key}: {`, stringifyNested(value, level + 2), `${lastIndent}}`].join('\n');
+    const newValue = Object
+      .entries(value)
+      .map(([curKey, curValue]) => {
+        if (value instanceof Object) {
+          return stringify(curKey, curValue, level + 3);
+        }
+
+        const curFirstIndent = getSpaces(level + 2);
+        return [curFirstIndent, `${curKey}: ${curValue}`].join('');
+      })
+      .join('\n');
+
+    return [`${firstIndent}${key}: {`, newValue, `${lastIndent}}`].join('\n');
   }
 
   return [firstIndent, `${key}: ${value}`].join('');
