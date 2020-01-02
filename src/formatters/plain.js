@@ -1,13 +1,11 @@
-/* eslint-disable no-use-before-define */
-
-const valueOutputs = {
+const outputValues = {
   string: (value) => `'${value}'`,
   number: (value) => value,
   object: () => '[complex value]',
   boolean: (value) => value,
 };
 
-const getOutputValue = (value) => valueOutputs[(typeof value)](value);
+const getOutputValue = (value) => outputValues[(typeof value)](value);
 
 const outputs = {
   added: ({ key, value }) => {
@@ -20,24 +18,23 @@ const outputs = {
     const outputValue2 = getOutputValue(valueAfter);
     return `Property '${key}' was updated. From ${outputValue1} to ${outputValue2}`;
   },
-  unchanged: () => '',
-  nested: ({ key, children }) => mapOutput(children, `${key}.`),
+  unchanged: () => null,
+  nested: ({ key, children }, fn) => fn(children, key),
 };
 
 const getOutput = (type) => outputs[type];
 
-const mapOutput = (data, parent = '') => (
+const buildOutput = (data, ...ancestry) => (
   data
     .map((node) => {
       const { key, type } = node;
-      const output = getOutput(type);
+      const makeOutput = getOutput(type);
+      const currentKey = [...ancestry, key].join('.');
 
-      return output({ ...node, key: `${parent}${key}` });
+      return makeOutput({ ...node, key: currentKey }, buildOutput);
     })
-    .filter((node) => node !== '')
+    .filter((node) => node !== null)
     .join('\n')
 );
-
-const buildOutput = (data) => mapOutput(data, '');
 
 export default buildOutput;
