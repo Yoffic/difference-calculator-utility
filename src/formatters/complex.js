@@ -3,25 +3,25 @@ const getSpaces = (val) => ' '.repeat(val * indentStep);
 
 const stringify = (key, value, level) => {
   const firstIndent = getSpaces(level);
-  const lastIndent = getSpaces(level + 1);
 
-  if (value instanceof Object) {
-    const newValue = Object
-      .entries(value)
-      .map(([curKey, curValue]) => {
-        if (value instanceof Object) {
-          return stringify(curKey, curValue, level + 3);
-        }
-
-        const curFirstIndent = getSpaces(level + 2);
-        return [curFirstIndent, `${curKey}: ${curValue}`].join('');
-      })
-      .join('\n');
-
-    return [`${firstIndent}${key}: {`, newValue, `${lastIndent}}`].join('\n');
+  if (!(value instanceof Object)) {
+    return [firstIndent, `${key}: ${value}`].join('');
   }
 
-  return [firstIndent, `${key}: ${value}`].join('');
+  const lastIndent = getSpaces(level + 1);
+  const newValue = Object
+    .entries(value)
+    .map(([curKey, curValue]) => {
+      if (value instanceof Object) {
+        return stringify(curKey, curValue, level + 3);
+      }
+
+      const curFirstIndent = getSpaces(level + 2);
+      return [curFirstIndent, `${curKey}: ${curValue}`].join('');
+    })
+    .join('\n');
+
+  return [`${firstIndent}${key}: {`, newValue, `${lastIndent}}`].join('\n');
 };
 
 const outputs = {
