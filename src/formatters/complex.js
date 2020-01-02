@@ -1,4 +1,5 @@
-const getSpaces = (val) => ' '.repeat(val * 2);
+const indentStep = 2;
+const getSpaces = (val) => ' '.repeat(val * indentStep);
 
 const stringify = (key, value, level) => {
   const firstIndent = getSpaces(level);
