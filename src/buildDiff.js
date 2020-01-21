@@ -1,27 +1,35 @@
-import { has, union } from 'lodash';
+import { has, isObject, union } from 'lodash';
+
+const nodes = [
+  {
+    check: (key, data1) => !has(data1, key),
+    process: (key, _value1, value2) => ({ key, type: 'added', value: value2 }),
+  },
+  {
+    check: (key, _data1, data2) => !has(data2, key),
+    process: (key, value) => ({ key, type: 'removed', value }),
+  },
+  {
+    check: (key, data1, data2) => isObject(data1[key]) && isObject(data2[key]),
+    process: (key, value1, value2, fn) => ({ key, type: 'nested', children: fn(value1, value2) }),
+  },
+  {
+    check: (key, data1, data2) => data1[key] !== data2[key],
+    process: (key, value1, value2) => ({ key, type: 'updated', valueBefore: value1, valueAfter: value2 }),
+  },
+  {
+    check: (key, data1, data2) => data1[key] === data2[key],
+    process: (key, value) => ({ key, type: 'unchanged', value }),
+  },
+];
+
+const getNode = (key, data1, data2) => nodes.find(({ check }) => check(key, data1, data2));
 
 const buildDiff = (data1, data2) => {
   const keys = union(Object.keys(data1), Object.keys(data2)).sort();
   const diff = keys.map((key) => {
-    if (!has(data1, key)) {
-      return { key, type: 'added', value: data2[key] };
-    }
-
-    if (!has(data2, key)) {
-      return { key, type: 'removed', value: data1[key] };
-    }
-
-    if (data1[key] instanceof Object && data2[key] instanceof Object) {
-      return { key, type: 'nested', children: buildDiff(data1[key], data2[key]) };
-    }
-
-    if (data1[key] !== data2[key]) {
-      return {
-        key, type: 'updated', valueBefore: data1[key], valueAfter: data2[key],
-      };
-    }
-
-    return { key, type: 'unchanged', value: data2[key] };
+    const { process } = getNode(key, data1, data2);
+    return process(key, data1[key], data2[key], buildDiff);
   });
   return diff;
 };
