@@ -15,7 +15,12 @@ const nodes = [
   },
   {
     check: (key, data1, data2) => data1[key] !== data2[key],
-    process: (key, value1, value2) => ({ key, type: 'updated', valueBefore: value1, valueAfter: value2 }),
+    process: (key, value1, value2) => ({
+      key,
+      type: 'updated',
+      valueBefore: value1,
+      valueAfter: value2,
+    }),
   },
   {
     check: (key, data1, data2) => data1[key] === data2[key],
